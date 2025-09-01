@@ -442,8 +442,11 @@
          .quick-contact-btn.phone {
              background: #34B7F1;
         }
-        .quick-contact-btn.hide-on-desktop {
-            display: none; /* JS will apply this on desktop */
+        .hide-on-desktop {
+            display: flex !important; /* Default state */
+        }
+        body.desktop .hide-on-desktop {
+             display: none !important; /* Hide on desktop */
         }
 
 
@@ -507,7 +510,7 @@
             .contact-form { padding: 1.5rem; }
 
             .quick-contact {
-                flex-direction: column; /* Stack vertically on mobile */
+                flex-direction: column;
                 gap: 15px;
             }
             html[dir="ltr"] .quick-contact { right: 15px; }
@@ -648,7 +651,7 @@
     <div class="quick-contact">
         <a href="https://www.instagram.com/ghaith_photographer_?igsh=MWlrd2p0eGM4cTNhZw==" target="_blank" class="quick-contact-btn instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://wa.me/962772599114" target="_blank" class="quick-contact-btn whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        <a href="tel:0772599114" id="phone-call-btn" class="quick-contact-btn phone" aria-label="Call"><i class="fas fa-phone"></i></a>
+        <a href="tel:0772599114" id="phone-call-btn" class="quick-contact-btn phone hide-on-desktop" aria-label="Call"><i class="fas fa-phone"></i></a>
     </div>
 
     <footer class="main-footer">
@@ -739,6 +742,10 @@
                 htmlEl.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
                 document.body.className = `lang-${lang}`;
 
+                if (!/Mobi|Android/i.test(navigator.userAgent)) {
+                    document.body.classList.add('desktop');
+                }
+
                 document.querySelectorAll('[data-key]').forEach(element => {
                     const key = element.getAttribute('data-key');
                     if(translations[lang][key]) {
@@ -748,7 +755,11 @@
                 
                 langSwitcher.textContent = lang === 'ar' ? 'English' : 'العربية';
                 localStorage.setItem('lang', lang);
-                window.location.hash = lang;
+                
+                // Only set hash if it's different to avoid reloads
+                if(window.location.hash !== `#${lang}`) {
+                    history.pushState(null, null, `#${lang}`);
+                }
 
                 Object.keys(validators).forEach(key => checkField(key));
             };
@@ -780,12 +791,13 @@
             window.addEventListener('scroll', reveal);
             reveal();
 
+            // Active link highlighting on scroll - Re-enabled for better UX
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.main-nav a');
             window.addEventListener('scroll', () => {
                 let current = 'home';
                 sections.forEach(section => {
-                    if (pageYOffset >= section.offsetTop - 150) {
+                    if (pageYOffset >= section.offsetTop - header.clientHeight - 5) { // Adjusted offset
                         current = section.getAttribute('id');
                     }
                 });
@@ -882,7 +894,7 @@
 
             contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const isFormValid = Object.keys(validators).every(checkField);
+                const isFormValid = Object.keys(validators).every(fieldName => checkField(fieldName));
                 if (isFormValid) this.submit();
             });
 
@@ -901,12 +913,6 @@
             navLinksMobile.forEach(link => link.addEventListener('click', () => {
                 if (nav.classList.contains('nav-open')) toggleNav();
             }));
-
-            // --- Device Specific Logic ---
-            const isMobileDevice = () => /Mobi|Android|iPhone/i.test(navigator.userAgent);
-            if (!isMobileDevice()) {
-                document.getElementById('phone-call-btn').classList.add('hide-on-desktop');
-            }
 
             // --- Auto Scroll Logic ---
             if (!sessionStorage.getItem('hasScrolled')) {
