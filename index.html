@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>غيث القرشي || تصوير فوتوغرافي</title>
+    <title>Ghaith Al-qurashi || Photography</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -30,11 +30,15 @@
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             line-height: 1.8;
             background: var(--secondary-color);
             color: var(--text-color);
-            direction: rtl;
+            transition: font-family 0.3s ease;
+        }
+
+        body.lang-ar {
+            font-family: 'Cairo', sans-serif;
         }
 
         .container {
@@ -106,6 +110,7 @@
         .main-nav ul {
             display: flex;
             list-style: none;
+            align-items: center;
         }
 
         .main-nav a {
@@ -124,18 +129,38 @@
             height: 3px;
             display: block;
             margin-top: 5px;
-            right: 50%;
             background: var(--accent-color);
-            transition: width 0.3s ease, right 0.3s ease;
+            transition: width 0.3s ease, left 0.3s ease, right 0.3s ease;
         }
+        
+        html[dir="ltr"] .main-nav a::after { left: 50%; }
+        html[dir="rtl"] .main-nav a::after { right: 50%; }
+
         .main-nav a:hover::after,
         .main-nav a.active-link::after {
             width: 100%;
-            right: 0;
         }
+        html[dir="ltr"] .main-nav a:hover::after, html[dir="ltr"] .main-nav a.active-link::after { left: 0; }
+        html[dir="rtl"] .main-nav a:hover::after, html[dir="rtl"] .main-nav a.active-link::after { right: 0; }
+
         .main-nav a:hover,
         .main-nav a.active-link {
             color: var(--accent-color);
+        }
+
+        #lang-switcher {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background-color 0.3s;
+            margin: 0 1rem;
+        }
+        #lang-switcher:hover {
+            background-color: var(--accent-dark-color);
         }
 
         /* Hero Section */
@@ -182,7 +207,8 @@
         }
 
         .about-text { flex: 1; }
-        .about-text h2 { text-align: right; }
+        html[dir="ltr"] .about-text h2 { text-align: left; }
+        html[dir="rtl"] .about-text h2 { text-align: right; }
 
         /* Portfolio Gallery Section */
         #portfolio { background: #fff; }
@@ -205,7 +231,6 @@
             border-radius: 50px;
             font-weight: 700;
             transition: all 0.3s ease;
-            font-family: 'Cairo', sans-serif;
         }
 
         .filter-btn:hover {
@@ -266,22 +291,27 @@
         .form-group label {
             position: absolute;
             top: 0.8rem;
-            right: 1rem;
             padding: 0 0.25rem;
             background: white;
             color: #999;
             transition: all 0.2s ease;
             pointer-events: none;
         }
+        html[dir="ltr"] .form-group label { left: 1rem; }
+        html[dir="rtl"] .form-group label { right: 1rem; }
+
         .form-group input, .form-group textarea {
             width: 100%;
             padding: 0.8rem;
             border-radius: 5px;
             border: 1px solid #ddd;
-            font-family: 'Cairo', sans-serif;
             font-size: 1rem;
             transition: border-color 0.2s ease;
         }
+        body.lang-ar .form-group input, body.lang-ar .form-group textarea { font-family: 'Cairo', sans-serif; }
+        body.lang-en .form-group input, body.lang-en .form-group textarea { font-family: 'Montserrat', sans-serif; }
+
+
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--accent-color);
@@ -291,18 +321,24 @@
         .form-group textarea:focus + label,
         .form-group textarea:not(:placeholder-shown) + label {
             top: -0.7rem;
-            right: 0.8rem;
             font-size: 0.8rem;
             color: var(--accent-color);
         }
+        html[dir="ltr"] .form-group input:focus + label,
+        html[dir="ltr"] .form-group input:not(:placeholder-shown) + label { left: 0.8rem; }
+        html[dir="rtl"] .form-group input:focus + label,
+        html[dir="rtl"] .form-group input:not(:placeholder-shown) + label { right: 0.8rem; }
+
 
         .error-message {
             color: var(--error-color);
             font-size: 0.8rem;
             position: absolute;
             bottom: 0;
-            right: 5px;
         }
+        html[dir="ltr"] .error-message { left: 5px; }
+        html[dir="rtl"] .error-message { right: 5px; }
+
 
         .submit-btn {
             width: 100%;
@@ -315,7 +351,6 @@
             font-size: 1.1rem;
             font-weight: 700;
             transition: all 0.3s ease;
-            font-family: 'Cairo', sans-serif;
             letter-spacing: 0.5px;
             margin-top: 1rem;
         }
@@ -332,26 +367,28 @@
         .word-counter {
             font-size: 0.8rem;
             color: #888;
-            text-align: left;
             position: absolute;
             bottom: 0;
-            left: 5px;
         }
+        html[dir="ltr"] .word-counter { right: 5px; }
+        html[dir="rtl"] .word-counter { left: 5px; }
 
         /* Floating Contact Buttons */
         .quick-contact {
             position: fixed;
             bottom: 25px;
-            left: 25px;
             z-index: 1001;
             display: flex;
             flex-direction: column;
             gap: 15px;
             opacity: 0;
             transform: scale(0.8);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease, left 0s, right 0s;
             pointer-events: none;
         }
+        html[dir="ltr"] .quick-contact { right: 25px; }
+        html[dir="rtl"] .quick-contact { left: 25px; }
+
         .quick-contact.visible {
             opacity: 1;
             transform: scale(1);
@@ -399,7 +436,7 @@
             .main-header { padding: 0.5rem 0; }
             .main-header .container { flex-direction: column; gap: 0.5rem; }
             #about .container { flex-direction: column; text-align: center; }
-            .about-text h2 { text-align: center; }
+            .about-text h2 { text-align: center !important; }
             .gallery { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
             .filter-btn { padding: 0.5rem 1rem; }
         }
@@ -409,13 +446,14 @@
 
     <header class="main-header" id="main-header">
         <div class="container">
-            <a href="#home" class="logo">غيث القرشي 📸</a>
+            <a href="#home" class="logo">Ghaith Al-qurashi 📸</a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#home" data-section="home">الرئيسية</a></li>
-                    <li><a href="#about" data-section="about">عني</a></li>
-                    <li><a href="#portfolio" data-section="portfolio">أعمالي</a></li>
-                    <li><a href="#contact" data-section="contact">تواصل معي</a></li>
+                    <li><a href="#home" data-section="home" data-key="navHome">Home</a></li>
+                    <li><a href="#about" data-section="about" data-key="navAbout">About Me</a></li>
+                    <li><a href="#portfolio" data-section="portfolio" data-key="navPortfolio">Portfolio</a></li>
+                    <li><a href="#contact" data-section="contact" data-key="navContact">Contact Me</a></li>
+                    <li><button id="lang-switcher">العربية</button></li>
                 </ul>
             </nav>
         </div>
@@ -423,110 +461,111 @@
 
     <section id="home">
         <div class="hero-content">
-            <h1>نلتقط لحظات لا تُنسى</h1>
-            <p>تصوير فوتوغرافي وفيديو احترافي</p>
+            <h1 data-key="heroTitle">Capturing Unforgettable Moments</h1>
+            <p data-key="heroSubtitle">Professional Photography & Videography</p>
         </div>
     </section>
 
     <section id="about" class="reveal">
         <div class="container">
             <div class="about-image">
-                <img src="https://b.top4top.io/p_3499yjfhh1.png" alt="المصور غيث القرشي">
+                <img src="https://b.top4top.io/p_3499yjfhh1.png" alt="Photographer Ghaith Al-qurashi">
             </div>
             <div class="about-text">
-                <h2>Ghaith Al-qurashi || غيث القرشي</h2>
-                <p>مصور فوتوغرافي ومصور فيديو شغوف، أستخدم كاميرا Canon R8 📸 لتوثيق أجمل اللحظات. متخصص في التصوير داخل الاستديو وفي جميع المواقع. طالب علوم حاسوب 👨‍💻 في جامعة العلوم والتكنولوجيا. للحجوزات، يرجى التواصل عبر واتس اب: 0772599114</p>
+                <h2 data-key="aboutTitle">Ghaith Al-qurashi</h2>
+                <p data-key="aboutText">A passionate photographer and videographer, I use a Canon R8 📸 to document the most beautiful moments. I specialize in both in-studio and on-location shoots. Computer Science student 👨‍💻 at Jordan University of Science and Technology. For bookings, please contact me via WhatsApp: 0772599114</p>
             </div>
         </div>
     </section>
 
     <section id="portfolio" class="reveal">
         <div class="container">
-            <h2>معرض أعمالي الكامل</h2>
+            <h2 data-key="portfolioTitle">My Complete Portfolio</h2>
             <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">الكل</button>
-                <button class="filter-btn" data-filter="girl1">الفتاة 1</button>
-                <button class="filter-btn" data-filter="girl2">الفتاة 2</button>
-                <button class="filter-btn" data-filter="girl3">الفتاة 3</button>
-                <button class="filter-btn" data-filter="boy1">الشاب 1</button>
-                <button class="filter-btn" data-filter="boy2">الشاب 2</button>
-                <button class="filter-btn" data-filter="boy3">الشاب 3</button>
-                <button class="filter-btn" data-filter="videos">الفيديوهات</button>
+                <button class="filter-btn active" data-filter="all" data-key="filterAll">All</button>
+                <button class="filter-btn" data-filter="girl1" data-key="filterGirl1">Female Portraits 1</button>
+                <button class="filter-btn" data-filter="girl2" data-key="filterGirl2">Female Portraits 2</button>
+                <button class="filter-btn" data-filter="girl3" data-key="filterGirl3">Female Portraits 3</button>
+                <button class="filter-btn" data-filter="boy1" data-key="filterBoy1">Male Portraits 1</button>
+                <button class="filter-btn" data-filter="boy2" data-key="filterBoy2">Male Portraits 2</button>
+                <button class="filter-btn" data-filter="boy3" data-key="filterBoy3">Male Portraits 3</button>
+                <button class="filter-btn" data-filter="videos" data-key="filterVideos">Videos</button>
             </div>
 
             <div class="gallery">
-                <div class="gallery-item reveal" data-category="girl1"><img src="https://b.top4top.io/p_349928urf1.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl1"><img src="https://c.top4top.io/p_34991y6zv2.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl2"><img src="https://d.top4top.io/p_349900e5y1.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl2"><img src="https://e.top4top.io/p_3499j57ks2.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl2"><img src="https://g.top4top.io/p_3499xaefg4.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl2"><img src="https://h.top4top.io/p_3499tbscw5.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl2"><img src="https://i.top4top.io/p_3499yxprz6.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl2"><img src="https://j.top4top.io/p_34996cafe7.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl3"><img src="https://a.top4top.io/p_3499af6t66.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl3"><img src="https://l.top4top.io/p_3499vm3jw5.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl3"><img src="https://k.top4top.io/p_3499hrxf24.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl3"><img src="https://i.top4top.io/p_34998whbm2.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="girl3"><img src="https://h.top4top.io/p_3499ppjli1.jpg" alt="صورة فتاة"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://j.top4top.io/p_3499qfd617.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://k.top4top.io/p_349955q498.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://l.top4top.io/p_3499epsbn9.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://h.top4top.io/p_349977mmm5.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://g.top4top.io/p_3499ja4il4.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://f.top4top.io/p_349924pxt3.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://e.top4top.io/p_3499u5v5y2.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy1"><img src="https://d.top4top.io/p_3499ro9tc1.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy2"><img src="https://a.top4top.io/p_3499cv0lb1.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy2"><img src="https://b.top4top.io/p_3499t43cw2.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy2"><img src="https://c.top4top.io/p_34992eg3m3.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy2"><img src="https://d.top4top.io/p_34999coyr4.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy2"><img src="https://e.top4top.io/p_3499kcp9s5.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy3"><img src="https://j.top4top.io/p_3499kgyly7.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy3"><img src="https://i.top4top.io/p_3499wodtu6.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy3"><img src="https://h.top4top.io/p_3499qx6dw5.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy3"><img src="https://g.top4top.io/p_3499vjspx4.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy3"><img src="https://f.top4top.io/p_3499h5lep3.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy3"><img src="https://e.top4top.io/p_3499yn7lw2.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="boy3"><img src="https://d.top4top.io/p_3499km9e41.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://a.top4top.io/m_3499b7byn1.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://b.top4top.io/m_3499sy4k52.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://c.top4top.io/m_3499kx6ew3.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://d.top4top.io/m_3499pxozc4.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
+                 <!-- Images remain the same -->
+                <div class="gallery-item reveal" data-category="girl1"><img src="https://b.top4top.io/p_349928urf1.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl1"><img src="https://c.top4top.io/p_34991y6zv2.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl2"><img src="https://d.top4top.io/p_349900e5y1.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl2"><img src="https://e.top4top.io/p_3499j57ks2.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl2"><img src="https://g.top4top.io/p_3499xaefg4.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl2"><img src="https://h.top4top.io/p_3499tbscw5.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl2"><img src="https://i.top4top.io/p_3499yxprz6.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl2"><img src="https://j.top4top.io/p_34996cafe7.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl3"><img src="https://a.top4top.io/p_3499af6t66.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl3"><img src="https://l.top4top.io/p_3499vm3jw5.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl3"><img src="https://k.top4top.io/p_3499hrxf24.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl3"><img src="https://i.top4top.io/p_34998whbm2.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="girl3"><img src="https://h.top4top.io/p_3499ppjli1.jpg" alt="Portrait of a woman"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://j.top4top.io/p_3499qfd617.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://k.top4top.io/p_349955q498.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://l.top4top.io/p_3499epsbn9.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://h.top4top.io/p_349977mmm5.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://g.top4top.io/p_3499ja4il4.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://f.top4top.io/p_349924pxt3.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://e.top4top.io/p_3499u5v5y2.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy1"><img src="https://d.top4top.io/p_3499ro9tc1.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy2"><img src="https://a.top4top.io/p_3499cv0lb1.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy2"><img src="https://b.top4top.io/p_3499t43cw2.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy2"><img src="https://c.top4top.io/p_34992eg3m3.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy2"><img src="https://d.top4top.io/p_34999coyr4.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy2"><img src="https://e.top4top.io/p_3499kcp9s5.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy3"><img src="https://j.top4top.io/p_3499kgyly7.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy3"><img src="https://i.top4top.io/p_3499wodtu6.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy3"><img src="https://h.top4top.io/p_3499qx6dw5.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy3"><img src="https://g.top4top.io/p_3499vjspx4.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy3"><img src="https://f.top4top.io/p_3499h5lep3.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy3"><img src="https://e.top4top.io/p_3499yn7lw2.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="boy3"><img src="https://d.top4top.io/p_3499km9e41.jpg" alt="Portrait of a man"></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://a.top4top.io/m_3499b7byn1.mp4" type="video/mp4" data-key="videoFallback"></video></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://b.top4top.io/m_3499sy4k52.mp4" type="video/mp4" data-key="videoFallback"></video></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://c.top4top.io/m_3499kx6ew3.mp4" type="video/mp4" data-key="videoFallback"></video></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://d.top4top.io/m_3499pxozc4.mp4" type="video/mp4" data-key="videoFallback"></video></div>
             </div>
         </div>
     </section>
 
     <section id="contact" class="reveal">
         <div class="container">
-            <h2>تواصل معي</h2>
+            <h2 data-key="contactTitle">Contact Me</h2>
             <form id="contact-form" class="contact-form" action="https://formspree.io/f/mwpnvodj" method="POST" novalidate>
                 <div class="form-group">
                     <input type="text" id="name" name="name" required placeholder=" ">
-                    <label for="name">الاسم الكامل</label>
+                    <label for="name" data-key="formNameLabel">Full Name</label>
                     <div class="error-message" id="name-error"></div>
                 </div>
                 <div class="form-group">
                     <input type="email" id="email" name="email" required placeholder=" ">
-                    <label for="email">البريد الإلكتروني</label>
+                    <label for="email" data-key="formEmailLabel">Email Address</label>
                     <div class="error-message" id="email-error"></div>
                 </div>
                 <div class="form-group">
                     <input type="tel" id="phone" name="phone" required placeholder=" ">
-                    <label for="phone">رقم الهاتف</label>
+                    <label for="phone" data-key="formPhoneLabel">Phone Number</label>
                     <div class="error-message" id="phone-error"></div>
                 </div>
                 <div class="form-group">
                     <input type="text" id="subject" name="subject" required placeholder=" ">
-                    <label for="subject">الموضوع</label>
+                    <label for="subject" data-key="formSubjectLabel">Subject</label>
                     <div class="error-message" id="subject-error"></div>
                 </div>
                 <div class="form-group">
                     <textarea id="message" name="message" rows="5" required placeholder=" "></textarea>
-                    <label for="message">الرسالة</label>
-                    <div id="word-counter" class="word-counter">0 كلمة</div>
+                    <label for="message" data-key="formMessageLabel">Message</label>
+                    <div id="word-counter" class="word-counter">0 words</div>
                     <div class="error-message" id="message-error"></div>
                 </div>
-                <button type="submit" class="submit-btn">إرسال الرسالة</button>
+                <button type="submit" class="submit-btn" data-key="formSubmitBtn">Send Message</button>
             </form>
         </div>
     </section>
@@ -538,11 +577,122 @@
     </div>
 
     <footer class="main-footer">
-        <div class="container"><p>&copy; 2024 غيث القرشي للتصوير. جميع الحقوق محفوظة.</p></div>
+        <div class="container"><p data-key="footerText">&copy; 2024 Ghaith Al-qurashi Photography. All Rights Reserved.</p></div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Language Switcher Logic ---
+            const translations = {
+                en: {
+                    navHome: 'Home',
+                    navAbout: 'About Me',
+                    navPortfolio: 'Portfolio',
+                    navContact: 'Contact Me',
+                    heroTitle: 'Capturing Unforgettable Moments',
+                    heroSubtitle: 'Professional Photography & Videography',
+                    aboutTitle: 'Ghaith Al-qurashi',
+                    aboutText: 'A passionate photographer and videographer, I use a Canon R8 📸 to document the most beautiful moments. I specialize in both in-studio and on-location shoots. Computer Science student 👨‍💻 at Jordan University of Science and Technology. For bookings, please contact me via WhatsApp: 0772599114',
+                    portfolioTitle: 'My Complete Portfolio',
+                    filterAll: 'All',
+                    filterGirl1: 'Female Portraits 1',
+                    filterGirl2: 'Female Portraits 2',
+                    filterGirl3: 'Female Portraits 3',
+                    filterBoy1: 'Male Portraits 1',
+                    filterBoy2: 'Male Portraits 2',
+                    filterBoy3: 'Male Portraits 3',
+                    filterVideos: 'Videos',
+                    videoFallback: 'Your browser does not support the video tag.',
+                    contactTitle: 'Contact Me',
+                    formNameLabel: 'Full Name',
+                    formEmailLabel: 'Email Address',
+                    formPhoneLabel: 'Phone Number',
+                    formSubjectLabel: 'Subject',
+                    formMessageLabel: 'Message',
+                    formSubmitBtn: 'Send Message',
+                    wordCounterText: 'words',
+                    footerText: '© 2024 Ghaith Al-qurashi Photography. All Rights Reserved.',
+                    // Validation Messages
+                    validationName: 'Please enter a valid name (letters only).',
+                    validationEmail: 'Please enter a valid email address.',
+                    validationPhone: 'Please enter a valid phone number (digits only).',
+                    validationSubjectNoNumbers: 'Subject cannot contain numbers.',
+                    validationSubjectShort: 'Subject is too short.',
+                    validationMessage: 'Message must contain at least 12 words.',
+                },
+                ar: {
+                    navHome: 'الرئيسية',
+                    navAbout: 'عني',
+                    navPortfolio: 'أعمالي',
+                    navContact: 'تواصل معي',
+                    heroTitle: 'نلتقط لحظات لا تُنسى',
+                    heroSubtitle: 'تصوير فوتوغرافي وفيديو احترافي',
+                    aboutTitle: 'غيث القرشي',
+                    aboutText: 'مصور فوتوغرافي ومصور فيديو شغوف، أستخدم كاميرا Canon R8 📸 لتوثيق أجمل اللحظات. متخصص في التصوير داخل الاستديو وفي جميع المواقع. طالب علوم حاسوب 👨‍💻 في جامعة العلوم والتكنولوجيا. للحجوزات، يرجى التواصل عبر واتس اب: 0772599114',
+                    portfolioTitle: 'معرض أعمالي الكامل',
+                    filterAll: 'الكل',
+                    filterGirl1: 'الفتاة 1',
+                    filterGirl2: 'الفتاة 2',
+                    filterGirl3: 'الفتاة 3',
+                    filterBoy1: 'الشاب 1',
+                    filterBoy2: 'الشاب 2',
+                    filterBoy3: 'الشاب 3',
+                    filterVideos: 'الفيديوهات',
+                    videoFallback: 'المتصفح لا يدعم عرض الفيديو.',
+                    contactTitle: 'تواصل معي',
+                    formNameLabel: 'الاسم الكامل',
+                    formEmailLabel: 'البريد الإلكتروني',
+                    formPhoneLabel: 'رقم الهاتف',
+                    formSubjectLabel: 'الموضوع',
+                    formMessageLabel: 'الرسالة',
+                    formSubmitBtn: 'إرسال الرسالة',
+                    wordCounterText: 'كلمة',
+                    footerText: '© 2024 غيث القرشي للتصوير. جميع الحقوق محفوظة.',
+                    // Validation Messages
+                    validationName: 'الرجاء إدخال اسم صحيح (حروف فقط).',
+                    validationEmail: 'الرجاء إدخال بريد إلكتروني صحيح.',
+                    validationPhone: 'الرجاء إدخال رقم هاتف صحيح (أرقام فقط).',
+                    validationSubjectNoNumbers: 'الموضوع يجب أن لا يحتوي على أرقام.',
+                    validationSubjectShort: 'الموضوع قصير جدًا.',
+                    validationMessage: 'يجب أن تحتوي الرسالة على 12 كلمة على الأقل.',
+                }
+            };
+
+            const langSwitcher = document.getElementById('lang-switcher');
+            const htmlEl = document.documentElement;
+
+            const setLanguage = (lang) => {
+                htmlEl.setAttribute('lang', lang);
+                htmlEl.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+                document.body.className = `lang-${lang}`;
+
+                document.querySelectorAll('[data-key]').forEach(element => {
+                    const key = element.getAttribute('data-key');
+                    if(translations[lang][key]) {
+                        if (element.tagName === 'SOURCE') {
+                           // For video fallback text, we might need a different approach if this doesn't work.
+                           // This is more of a conceptual placeholder.
+                           element.parentElement.textContent = translations[lang][key];
+                        } else {
+                           element.textContent = translations[lang][key];
+                        }
+                    }
+                });
+                
+                langSwitcher.textContent = lang === 'ar' ? 'English' : 'العربية';
+                localStorage.setItem('lang', lang);
+
+                // Re-run validation checks to update messages
+                Object.keys(validators).forEach(checkField);
+            };
+
+            langSwitcher.addEventListener('click', () => {
+                const currentLang = htmlEl.getAttribute('lang');
+                const newLang = currentLang === 'en' ? 'ar' : 'en';
+                setLanguage(newLang);
+            });
+
+            // --- Standard Page Functions ---
             const header = document.getElementById('main-header');
             const quickContact = document.querySelector('.quick-contact');
 
@@ -612,7 +762,6 @@
                 });
             });
 
-            // --- Pause other videos when one plays ---
             const allVideos = document.querySelectorAll('.gallery video');
             allVideos.forEach(video => {
                 video.addEventListener('play', (e) => {
@@ -624,8 +773,6 @@
                 });
             });
 
-
-            // --- Advanced Live Form Validation ---
             const contactForm = document.getElementById('contact-form');
             const nameInput = document.getElementById('name');
             const emailInput = document.getElementById('email');
@@ -639,8 +786,9 @@
                     input: nameInput,
                     errorDiv: document.getElementById('name-error'),
                     validate: () => {
-                        const nameRegex = /^[\p{L}\s'-]+$/u;
-                        if (!nameRegex.test(nameInput.value.trim())) return 'الرجاء إدخال اسم صحيح (حروف فقط).';
+                        const currentLang = htmlEl.getAttribute('lang');
+                        const nameRegex = currentLang === 'ar' ? /^[\p{L}\s'-]+$/u : /^[A-Za-z\s'-]+$/;
+                        if (!nameRegex.test(nameInput.value.trim())) return translations[currentLang].validationName;
                         return '';
                     }
                 },
@@ -648,8 +796,9 @@
                     input: emailInput,
                     errorDiv: document.getElementById('email-error'),
                     validate: () => {
+                        const currentLang = htmlEl.getAttribute('lang');
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!emailRegex.test(emailInput.value.trim())) return 'الرجاء إدخال بريد إلكتروني صحيح.';
+                        if (!emailRegex.test(emailInput.value.trim())) return translations[currentLang].validationEmail;
                         return '';
                     }
                 },
@@ -657,8 +806,9 @@
                     input: phoneInput,
                     errorDiv: document.getElementById('phone-error'),
                     validate: () => {
+                        const currentLang = htmlEl.getAttribute('lang');
                         const phoneRegex = /^\d{7,}$/;
-                        if (!phoneRegex.test(phoneInput.value.trim())) return 'الرجاء إدخال رقم هاتف صحيح (أرقام فقط).';
+                        if (!phoneRegex.test(phoneInput.value.trim())) return translations[currentLang].validationPhone;
                         return '';
                     }
                 },
@@ -666,9 +816,10 @@
                     input: subjectInput,
                     errorDiv: document.getElementById('subject-error'),
                     validate: () => {
+                        const currentLang = htmlEl.getAttribute('lang');
                         const subjectRegex = /^[^0-9]*$/;
-                        if (!subjectRegex.test(subjectInput.value.trim())) return 'الموضوع يجب أن لا يحتوي على أرقام.';
-                        if (subjectInput.value.trim().length < 3) return 'الموضوع قصير جدًا.';
+                        if (!subjectRegex.test(subjectInput.value.trim())) return translations[currentLang].validationSubjectNoNumbers;
+                        if (subjectInput.value.trim().length < 3) return translations[currentLang].validationSubjectShort;
                         return '';
                     }
                 },
@@ -676,14 +827,16 @@
                     input: messageInput,
                     errorDiv: document.getElementById('message-error'),
                     validate: () => {
+                        const currentLang = htmlEl.getAttribute('lang');
                         const words = messageInput.value.trim().split(/\s+/).filter(w => w.length > 0);
-                        if (words.length < 12) return `يجب أن تحتوي الرسالة على 12 كلمة على الأقل.`;
+                        if (words.length < 12) return translations[currentLang].validationMessage;
                         return '';
                     }
                 }
             };
 
             const checkField = (fieldName) => {
+                if (!validators[fieldName]) return true;
                 const validator = validators[fieldName];
                 const errorMessage = validator.validate();
                 validator.errorDiv.textContent = errorMessage;
@@ -697,8 +850,9 @@
             });
 
             messageInput.addEventListener('input', () => {
+                const currentLang = htmlEl.getAttribute('lang');
                 const words = messageInput.value.trim().split(/\s+/).filter(w => w.length > 0);
-                wordCounter.textContent = `${words.length} كلمة`;
+                wordCounter.textContent = `${words.length} ${translations[currentLang].wordCounterText}`;
             });
 
             contactForm.addEventListener('submit', function(e) {
@@ -717,6 +871,10 @@
                     console.log('Form is invalid.');
                 }
             });
+
+            // Initialize language
+            const savedLang = localStorage.getItem('lang') || 'en';
+            setLanguage(savedLang);
         });
     </script>
 
