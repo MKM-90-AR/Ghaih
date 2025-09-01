@@ -166,23 +166,6 @@
         
         .hamburger-menu { display: none; }
 
-        .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .nav-overlay.nav-open {
-            opacity: 1;
-            visibility: visible;
-        }
-
 
         /* Hero Section */
         #home {
@@ -462,77 +445,40 @@
         @media(max-width: 768px) {
             .container { padding: 0 1rem; }
             section { padding: 3rem 0; }
-
             .main-header .container {
-                justify-content: space-between;
-                position: relative;
+                justify-content: center; /* Center the nav items */
             }
-             .logo { 
-                font-size: 1.2rem; 
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
+            .logo { 
+                display: none; /* Hide logo on mobile to make space for nav */
             }
-            html[dir="rtl"] .logo {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-            
-            /* MOBILE NAV FIX: Remove display:none and rely on transform */
-            .main-nav {
-                position: fixed;
-                top: 0;
-                background: #fff;
-                height: 100vh;
-                width: 280px;
-                z-index: 2000;
-                transition: transform 0.5s ease-in-out;
-                box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            }
-
-            html[dir="ltr"] .main-nav { left: 0; transform: translateX(-100%); }
-            html[dir="rtl"] .main-nav { right: 0; transform: translateX(100%); }
-            
-            .main-nav.nav-open { transform: translateX(0); }
-
             .main-nav ul {
-                display: flex;
-                flex-direction: column;
-                padding-top: 5rem;
-                align-items: center;
-                height: 100%;
+                flex-wrap: wrap; /* Allow nav items to wrap on small screens */
+                justify-content: center;
             }
-            .main-nav a { padding: 1rem 2rem; }
-            #lang-switcher { margin-top: 2rem; }
-
+            .main-nav a {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.8rem;
+            }
+            .main-nav a::after {
+                margin-top: 2px;
+                height: 2px;
+            }
+            #lang-switcher {
+                margin: 0.5rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
             .hamburger-menu {
-                display: block;
-                cursor: pointer;
-                z-index: 2001;
-                font-size: 1.5rem;
-                background: none;
-                border: none;
-                color: var(--primary-color);
-                padding: 0.5rem; /* Add padding for easier tapping */
+                display: none; /* Ensure hamburger is hidden */
             }
-            html[dir="ltr"] .hamburger-menu {
-                order: -1; /* Push to the left */
-            }
-             html[dir="rtl"] .hamburger-menu {
-                order: 1; /* Push to the right */
-            }
-            
             #about .container { flex-direction: column; text-align: center; gap: 2rem; }
             .about-image img { width: 200px; height: 200px; }
             .about-text h2 { text-align: center !important; }
-            
             .gallery { 
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1rem; 
             }
-
             .contact-form { padding: 1.5rem; }
-
             .quick-contact {
                 flex-direction: column;
                 gap: 15px;
@@ -559,7 +505,6 @@
             <button class="hamburger-menu" id="hamburger-menu" aria-label="Open Menu"><i class="fas fa-bars"></i></button>
         </div>
     </header>
-    <div class="nav-overlay" id="nav-overlay"></div>
 
     <section id="home">
         <div class="hero-content">
@@ -946,26 +891,30 @@
                 if (isFormValid) this.submit();
             });
 
+            // FIX: Conditional execution for hamburger menu
             const hamburger = document.getElementById('hamburger-menu');
-            const nav = document.getElementById('main-nav');
-            const navOverlay = document.getElementById('nav-overlay');
-            const navLinksAndButtons = nav.querySelectorAll('a, button');
+            if (hamburger) {
+                const nav = document.getElementById('main-nav');
+                const navOverlay = document.getElementById('nav-overlay');
+                const mobileNavLinks = document.querySelectorAll('#main-nav a, #main-nav button');
 
-            const toggleNav = () => {
-                nav.classList.toggle('nav-open');
-                navOverlay.classList.toggle('nav-open');
-            };
+                const toggleNav = () => {
+                    nav.classList.toggle('nav-open');
+                    if (navOverlay) navOverlay.classList.toggle('nav-open');
+                };
 
-            hamburger.addEventListener('click', toggleNav);
-            navOverlay.addEventListener('click', toggleNav);
-            navLinksAndButtons.forEach(link => {
-                // The main click handler for scrolling is separate, this just closes the menu
-                link.addEventListener('click', () => {
-                    if (nav.classList.contains('nav-open')) {
-                        toggleNav();
-                    }
+                hamburger.addEventListener('click', toggleNav);
+                if (navOverlay) navOverlay.addEventListener('click', toggleNav);
+                
+                mobileNavLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (nav.classList.contains('nav-open')) {
+                            toggleNav();
+                        }
+                    });
                 });
-            });
+            }
+
 
             // --- Auto Scroll Logic ---
             if (!sessionStorage.getItem('hasScrolled')) {
