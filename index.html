@@ -478,8 +478,8 @@
                 transform: translateX(-50%);
             }
             
+            /* MOBILE NAV FIX: Remove display:none and rely on transform */
             .main-nav {
-                display: none; /* Hide desktop nav */
                 position: fixed;
                 top: 0;
                 background: #fff;
@@ -489,19 +489,14 @@
                 transition: transform 0.5s ease-in-out;
                 box-shadow: 0 0 20px rgba(0,0,0,0.2);
             }
-            /* Add this to show the nav when it's open */
-            .main-nav.nav-open {
-                display: block;
-            }
 
             html[dir="ltr"] .main-nav { left: 0; transform: translateX(-100%); }
             html[dir="rtl"] .main-nav { right: 0; transform: translateX(100%); }
             
-            html[dir="ltr"] .main-nav.nav-open { transform: translateX(0); }
-            html[dir="rtl"] .main-nav.nav-open { transform: translateX(0); }
+            .main-nav.nav-open { transform: translateX(0); }
 
             .main-nav ul {
-                display: flex; /* Ensure flex is on for column layout */
+                display: flex;
                 flex-direction: column;
                 padding-top: 5rem;
                 align-items: center;
@@ -518,9 +513,13 @@
                 background: none;
                 border: none;
                 color: var(--primary-color);
+                padding: 0.5rem; /* Add padding for easier tapping */
             }
             html[dir="ltr"] .hamburger-menu {
-                order: 3; /* Push to the right */
+                order: -1; /* Push to the left */
+            }
+             html[dir="rtl"] .hamburger-menu {
+                order: 1; /* Push to the right */
             }
             
             #about .container { flex-direction: column; text-align: center; gap: 2rem; }
@@ -761,6 +760,7 @@
 
             const langSwitcher = document.getElementById('lang-switcher');
             const htmlEl = document.documentElement;
+            const header = document.getElementById('main-header');
 
             const setLanguage = (lang) => {
                 htmlEl.setAttribute('lang', lang);
@@ -781,28 +781,22 @@
                 langSwitcher.textContent = lang === 'ar' ? 'English' : 'العربية';
                 localStorage.setItem('lang', lang);
 
-                // FIX: Use hash for URL state to avoid security errors
-                if(window.location.hash !== `#${lang}`) {
-                    const currentHash = window.location.hash;
-                    const sectionHash = currentHash.includes('/') ? currentHash.split('/')[1] : null;
-
-                    if (sectionHash) {
-                        window.location.hash = `${lang}/${sectionHash}`;
-                    } else {
-                        window.location.hash = lang;
-                    }
+                const currentHash = window.location.hash;
+                const section = currentHash.includes('/') ? currentHash.split('/')[1] : null;
+                
+                const newHash = section ? `${lang}/${section}` : lang;
+                if (`#${newHash}` !== currentHash) {
+                    window.location.hash = newHash;
                 }
                 
                 Object.keys(validators).forEach(key => checkField(key));
             };
             
-
             langSwitcher.addEventListener('click', () => {
                 const newLang = htmlEl.getAttribute('lang') === 'en' ? 'ar' : 'en';
                 setLanguage(newLang);
             });
 
-            const header = document.getElementById('main-header');
             const quickContact = document.querySelector('.quick-contact');
 
             window.addEventListener('scroll', () => {
@@ -825,19 +819,38 @@
             reveal();
 
             const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.main-nav a[data-section]');
+            const desktopNavLinks = document.querySelectorAll('.main-header .main-nav a[data-section]');
             
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        navLinks.forEach(link => {
-                            link.classList.toggle('active-link', link.getAttribute('data-section') === entry.target.id);
+                        const id = entry.target.id;
+                        desktopNavLinks.forEach(link => {
+                            link.classList.toggle('active-link', link.getAttribute('data-section') === id);
                         });
                     }
                 });
             }, { rootMargin: '-50% 0px -50% 0px' });
 
             sections.forEach(section => observer.observe(section));
+
+            const allNavLinks = document.querySelectorAll('a[href^="#"]');
+            allNavLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - header.clientHeight,
+                            behavior: 'smooth'
+                        });
+                        const currentLang = htmlEl.getAttribute('lang');
+                        window.location.hash = `${currentLang}/${targetId}`;
+                    }
+                });
+            });
 
 
             const filterButtons = document.querySelectorAll('.filter-btn');
@@ -936,7 +949,7 @@
             const hamburger = document.getElementById('hamburger-menu');
             const nav = document.getElementById('main-nav');
             const navOverlay = document.getElementById('nav-overlay');
-            const navLinksMobile = nav.querySelectorAll('a, button');
+            const navLinksAndButtons = nav.querySelectorAll('a, button');
 
             const toggleNav = () => {
                 nav.classList.toggle('nav-open');
@@ -945,9 +958,14 @@
 
             hamburger.addEventListener('click', toggleNav);
             navOverlay.addEventListener('click', toggleNav);
-            navLinksMobile.forEach(link => link.addEventListener('click', () => {
-                if (nav.classList.contains('nav-open')) toggleNav();
-            }));
+            navLinksAndButtons.forEach(link => {
+                // The main click handler for scrolling is separate, this just closes the menu
+                link.addEventListener('click', () => {
+                    if (nav.classList.contains('nav-open')) {
+                        toggleNav();
+                    }
+                });
+            });
 
             // --- Auto Scroll Logic ---
             if (!sessionStorage.getItem('hasScrolled')) {
@@ -960,7 +978,7 @@
                         });
                         sessionStorage.setItem('hasScrolled', 'true');
                     }
-                }, 3000); // 3-second delay
+                }, 3000);
             }
             
             // --- Initialize Language from URL or Storage ---
