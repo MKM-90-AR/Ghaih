@@ -764,15 +764,21 @@
             reveal();
 
             const sections = document.querySelectorAll('section[id]');
-            const desktopNavLinks = document.querySelectorAll('.main-header .main-nav a[data-section]');
+            const allNavLinksWithSection = document.querySelectorAll('.main-nav a[data-section]');
             
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.id;
-                        desktopNavLinks.forEach(link => {
-                            link.classList.toggle('active-link', link.getAttribute('data-section') === id);
+                        // First, remove active class from ALL links
+                        allNavLinksWithSection.forEach(link => {
+                            link.classList.remove('active-link');
                         });
+                        // Then, add active class to the correct one
+                        const activeLink = document.querySelector(`.main-nav a[data-section="${id}"]`);
+                        if(activeLink) {
+                            activeLink.classList.add('active-link');
+                        }
                     }
                 });
             }, { rootMargin: '-50% 0px -50% 0px' });
@@ -891,7 +897,6 @@
                 if (isFormValid) this.submit();
             });
 
-            // FIX: Conditional execution for hamburger menu
             const hamburger = document.getElementById('hamburger-menu');
             if (hamburger) {
                 const nav = document.getElementById('main-nav');
