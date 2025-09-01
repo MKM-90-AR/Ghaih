@@ -59,7 +59,7 @@
         
         h2 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 5vw, 2.5rem);
             margin-bottom: 3rem;
         }
 
@@ -98,6 +98,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 70px;
         }
 
         .logo {
@@ -162,6 +163,9 @@
         #lang-switcher:hover {
             background-color: var(--accent-dark-color);
         }
+        
+        .hamburger-menu { display: none; }
+
 
         /* Hero Section */
         #home {
@@ -175,15 +179,22 @@
             padding: 0;
         }
 
+        .hero-content {
+            background: rgba(0,0,0,0.3);
+            padding: 2rem;
+            border-radius: 10px;
+            backdrop-filter: blur(2px);
+        }
+
         .hero-content h1 {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 6vw, 4rem);
             margin-bottom: 1rem;
             color: white;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .hero-content p {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
@@ -377,17 +388,16 @@
         .quick-contact {
             position: fixed;
             bottom: 25px;
+            right: 25px;
             z-index: 1001;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            flex-direction: row;
+            gap: 10px;
             opacity: 0;
             transform: scale(0.8);
-            transition: opacity 0.4s ease, transform 0.4s ease, left 0s, right 0s;
+            transition: opacity 0.4s ease, transform 0.4s ease;
             pointer-events: none;
         }
-        html[dir="ltr"] .quick-contact { right: 25px; }
-        html[dir="rtl"] .quick-contact { left: 25px; }
 
         .quick-contact.visible {
             opacity: 1;
@@ -431,10 +441,39 @@
         }
 
         @media(max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
-            .main-header { padding: 0.5rem 0; }
-            .main-header .container { flex-direction: column; gap: 0.5rem; }
+            .main-nav {
+                position: fixed;
+                top: 0;
+                background: #fff;
+                height: 100vh;
+                width: 280px;
+                z-index: 2000;
+                transition: transform 0.5s ease-in-out;
+            }
+            html[dir="ltr"] .main-nav { left: 0; transform: translateX(-100%); }
+            html[dir="rtl"] .main-nav { right: 0; transform: translateX(100%); }
+            
+            .main-nav.nav-open { transform: translateX(0); }
+
+            .main-nav ul {
+                flex-direction: column;
+                padding-top: 5rem;
+                align-items: center;
+                height: 100%;
+            }
+            .main-nav a { padding: 1rem 2rem; }
+            #lang-switcher { margin-top: 2rem; }
+
+            .hamburger-menu {
+                display: block;
+                cursor: pointer;
+                z-index: 2001;
+                font-size: 1.5rem;
+                background: none;
+                border: none;
+                color: var(--primary-color);
+            }
+
             #about .container { flex-direction: column; text-align: center; }
             .about-text h2 { text-align: center !important; }
             .gallery { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
@@ -447,7 +486,7 @@
     <header class="main-header" id="main-header">
         <div class="container">
             <a href="#home" class="logo">Ghaith Al-qurashi 📸</a>
-            <nav class="main-nav">
+             <nav class="main-nav" id="main-nav">
                 <ul>
                     <li><a href="#home" data-section="home" data-key="navHome">Home</a></li>
                     <li><a href="#about" data-section="about" data-key="navAbout">About Me</a></li>
@@ -456,6 +495,7 @@
                     <li><button id="lang-switcher">العربية</button></li>
                 </ul>
             </nav>
+            <button class="hamburger-menu" id="hamburger-menu" aria-label="Open Menu"><i class="fas fa-bars"></i></button>
         </div>
     </header>
 
@@ -670,8 +710,6 @@
                     const key = element.getAttribute('data-key');
                     if(translations[lang][key]) {
                         if (element.tagName === 'SOURCE') {
-                           // For video fallback text, we might need a different approach if this doesn't work.
-                           // This is more of a conceptual placeholder.
                            element.parentElement.textContent = translations[lang][key];
                         } else {
                            element.textContent = translations[lang][key];
@@ -683,7 +721,7 @@
                 localStorage.setItem('lang', lang);
 
                 // Re-run validation checks to update messages
-                Object.keys(validators).forEach(checkField);
+                Object.keys(validators).forEach(key => checkField(key));
             };
 
             langSwitcher.addEventListener('click', () => {
@@ -871,6 +909,22 @@
                     console.log('Form is invalid.');
                 }
             });
+
+            // --- Hamburger Menu Logic ---
+            const hamburger = document.getElementById('hamburger-menu');
+            const nav = document.getElementById('main-nav');
+            const navLinksMobile = nav.querySelectorAll('a');
+
+            hamburger.addEventListener('click', () => {
+                nav.classList.toggle('nav-open');
+            });
+            
+            navLinksMobile.forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('nav-open');
+                });
+            });
+
 
             // Initialize language
             const savedLang = localStorage.getItem('lang') || 'en';
