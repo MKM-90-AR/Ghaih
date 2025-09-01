@@ -186,33 +186,26 @@
 
         /* Hero Section */
         #home {
-            height: 100vh;
+            height: 90vh; /* Reduced height */
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             color: white;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1964&auto=format&fit=crop') no-repeat center center/cover;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1964&auto=format&fit=crop') no-repeat center center/cover;
             padding: 0;
-        }
-
-        .hero-content {
-            background: rgba(0,0,0,0.3);
-            padding: 2rem;
-            border-radius: 10px;
-            backdrop-filter: blur(2px);
         }
 
         .hero-content h1 {
             font-size: clamp(2.5rem, 6vw, 4rem);
             margin-bottom: 1rem;
             color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 0 3px 15px rgba(0,0,0,0.6); /* Enhanced text shadow */
         }
 
         .hero-content p {
             font-size: clamp(1.2rem, 3vw, 1.5rem);
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.6); /* Enhanced text shadow */
         }
 
         /* About Me Section */
@@ -449,6 +442,10 @@
          .quick-contact-btn.phone {
              background: #34B7F1;
         }
+        .quick-contact-btn.hide-on-desktop {
+            display: none; /* JS will apply this on desktop */
+        }
+
 
         /* Footer */
         .main-footer {
@@ -458,15 +455,12 @@
             padding: 2rem 0;
         }
 
+        /* --- MOBILE OPTIMIZATIONS --- */
         @media(max-width: 768px) {
-            /* --- General Mobile Adjustments --- */
             .container { padding: 0 1rem; }
             section { padding: 3rem 0; }
 
-            /* --- Header & Nav --- */
-            .logo {
-                font-size: 1.2rem; /* Smaller logo for mobile */
-            }
+            .logo { font-size: 1.2rem; }
             .main-nav {
                 position: fixed;
                 top: 0;
@@ -500,31 +494,18 @@
                 border: none;
                 color: var(--primary-color);
             }
-
-            /* --- Hero --- */
-            .hero-content {
-                padding: 1.5rem; /* Tighter padding on mobile */
-            }
-
-            /* --- About --- */
+            
             #about .container { flex-direction: column; text-align: center; gap: 2rem; }
-            .about-image img { width: 200px; height: 200px; } /* Smaller profile picture */
+            .about-image img { width: 200px; height: 200px; }
             .about-text h2 { text-align: center !important; }
             
-            /* --- Portfolio --- */
-            .filter-btn {
-                padding: 0.6rem 1.2rem; /* Slightly larger touch targets */
-                font-size: 0.9rem;
-            }
             .gallery { 
-                grid-template-columns: repeat(2, 1fr); /* Strict 2-column layout */
+                grid-template-columns: repeat(2, 1fr);
                 gap: 1rem; 
             }
 
-            /* --- Contact Form --- */
             .contact-form { padding: 1.5rem; }
 
-            /* --- Quick Contact Buttons --- */
             .quick-contact {
                 flex-direction: column; /* Stack vertically on mobile */
                 gap: 15px;
@@ -567,7 +548,7 @@
             </div>
             <div class="about-text">
                 <h2 data-key="aboutTitle">Ghaith Al-qurashi</h2>
-                <p data-key="aboutText">A passionate photographer and videographer, I use a Canon R8 📸 to document the most beautiful moments. I specialize in both in-studio and on-location shoots. Computer Science student 👨‍💻 at Jordan University of Science and Technology. For bookings, please contact me via WhatsApp: 0772599114</p>
+                <p data-key="aboutText">I'm a photographer and a videographer, I use a Canon r8 camera.📸 Specialised in 🎞photographing all occasions, indoor and outdoor photography in collecting places.</p>
             </div>
         </div>
     </section>
@@ -667,7 +648,7 @@
     <div class="quick-contact">
         <a href="https://www.instagram.com/ghaith_photographer_?igsh=MWlrd2p0eGM4cTNhZw==" target="_blank" class="quick-contact-btn instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://wa.me/962772599114" target="_blank" class="quick-contact-btn whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        <a href="tel:0772599114" class="quick-contact-btn phone" aria-label="Call"><i class="fas fa-phone"></i></a>
+        <a href="tel:0772599114" id="phone-call-btn" class="quick-contact-btn phone" aria-label="Call"><i class="fas fa-phone"></i></a>
     </div>
 
     <footer class="main-footer">
@@ -676,7 +657,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Language Switcher Logic ---
+            // --- Translations Object ---
             const translations = {
                 en: {
                     navHome: 'Home',
@@ -686,7 +667,7 @@
                     heroTitle: 'Capturing Unforgettable Moments',
                     heroSubtitle: 'Professional Photography & Videography',
                     aboutTitle: 'Ghaith Al-qurashi',
-                    aboutText: 'A passionate photographer and videographer, I use a Canon R8 📸 to document the most beautiful moments. I specialize in both in-studio and on-location shoots. Computer Science student 👨‍💻 at Jordan University of Science and Technology. For bookings, please contact me via WhatsApp: 0772599114',
+                    aboutText: "I'm a photographer and a videographer, I use a Canon r8 camera.📸 Specialised in 🎞photographing all occasions, indoor and outdoor photography in collecting places.",
                     portfolioTitle: 'My Complete Portfolio',
                     filterAll: 'All',
                     filterGirl1: 'Female Portraits 1',
@@ -706,10 +687,9 @@
                     formSubmitBtn: 'Send Message',
                     wordCounterText: 'words',
                     footerText: '© 2024 Ghaith Al-qurashi Photography. All Rights Reserved.',
-                    // Validation Messages
                     validationName: 'Please enter a valid name (letters only).',
                     validationEmail: 'Please enter a valid email address.',
-                    validationPhone: 'Please enter a valid phone number (digits only).',
+                    validationPhone: 'Please enter a valid phone number (at least 7 digits).',
                     validationSubjectNoNumbers: 'Subject cannot contain numbers.',
                     validationSubjectShort: 'Subject is too short.',
                     validationMessage: 'Message must contain at least 12 words.',
@@ -722,7 +702,7 @@
                     heroTitle: 'نلتقط لحظات لا تُنسى',
                     heroSubtitle: 'تصوير فوتوغرافي وفيديو احترافي',
                     aboutTitle: 'غيث القرشي',
-                    aboutText: 'مصور فوتوغرافي ومصور فيديو شغوف، أستخدم كاميرا Canon R8 📸 لتوثيق أجمل اللحظات. متخصص في التصوير داخل الاستديو وفي جميع المواقع. طالب علوم حاسوب 👨‍💻 في جامعة العلوم والتكنولوجيا. للحجوزات، يرجى التواصل عبر واتس اب: 0772599114',
+                    aboutText: 'أنا مصور فوتوغرافي ومصور فيديو، أستخدم كاميرا كانون R8.📸 متخصص في 🎞تصوير جميع المناسبات، والتصوير الداخلي والخارجي في أماكن التجمعات.',
                     portfolioTitle: 'معرض أعمالي الكامل',
                     filterAll: 'الكل',
                     filterGirl1: 'الفتاة 1',
@@ -742,10 +722,9 @@
                     formSubmitBtn: 'إرسال الرسالة',
                     wordCounterText: 'كلمة',
                     footerText: '© 2024 غيث القرشي للتصوير. جميع الحقوق محفوظة.',
-                    // Validation Messages
                     validationName: 'الرجاء إدخال اسم صحيح (حروف فقط).',
                     validationEmail: 'الرجاء إدخال بريد إلكتروني صحيح.',
-                    validationPhone: 'الرجاء إدخال رقم هاتف صحيح (أرقام فقط).',
+                    validationPhone: 'الرجاء إدخال رقم هاتف صحيح (7 أرقام على الأقل).',
                     validationSubjectNoNumbers: 'الموضوع يجب أن لا يحتوي على أرقام.',
                     validationSubjectShort: 'الموضوع قصير جدًا.',
                     validationMessage: 'يجب أن تحتوي الرسالة على 12 كلمة على الأقل.',
@@ -763,55 +742,40 @@
                 document.querySelectorAll('[data-key]').forEach(element => {
                     const key = element.getAttribute('data-key');
                     if(translations[lang][key]) {
-                        if (element.tagName === 'SOURCE') {
-                           element.parentElement.textContent = translations[lang][key];
-                        } else {
-                           element.textContent = translations[lang][key];
-                        }
+                        element.innerHTML = translations[lang][key];
                     }
                 });
                 
                 langSwitcher.textContent = lang === 'ar' ? 'English' : 'العربية';
                 localStorage.setItem('lang', lang);
+                window.location.hash = lang;
 
-                // Re-run validation checks to update messages
                 Object.keys(validators).forEach(key => checkField(key));
             };
 
             langSwitcher.addEventListener('click', () => {
-                const currentLang = htmlEl.getAttribute('lang');
-                const newLang = currentLang === 'en' ? 'ar' : 'en';
+                const newLang = htmlEl.getAttribute('lang') === 'en' ? 'ar' : 'en';
                 setLanguage(newLang);
             });
 
-            // --- Standard Page Functions ---
             const header = document.getElementById('main-header');
             const quickContact = document.querySelector('.quick-contact');
 
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 100) {
-                    header.classList.add('visible');
-                } else {
-                    header.classList.remove('visible');
-                }
-                
-                if (window.scrollY > 400) {
-                    quickContact.classList.add('visible');
-                } else {
-                    quickContact.classList.remove('visible');
-                }
+                header.classList.toggle('visible', window.scrollY > 100);
+                quickContact.classList.toggle('visible', window.scrollY > 400);
             });
 
             function reveal() {
                 const reveals = document.querySelectorAll('.reveal');
-                for (let i = 0; i < reveals.length; i++) {
+                reveals.forEach(revealEl => {
                     const windowHeight = window.innerHeight;
-                    const elementTop = reveals[i].getBoundingClientRect().top;
+                    const elementTop = revealEl.getBoundingClientRect().top;
                     const elementVisible = 150;
                     if (elementTop < windowHeight - elementVisible) {
-                        reveals[i].classList.add('active');
+                        revealEl.classList.add('active');
                     }
-                }
+                });
             }
             window.addEventListener('scroll', reveal);
             reveal();
@@ -821,16 +785,12 @@
             window.addEventListener('scroll', () => {
                 let current = 'home';
                 sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 150) {
+                    if (pageYOffset >= section.offsetTop - 150) {
                         current = section.getAttribute('id');
                     }
                 });
                 navLinks.forEach(a => {
-                    a.classList.remove('active-link');
-                    if (a.getAttribute('data-section') === current) {
-                        a.classList.add('active-link');
-                    }
+                    a.classList.toggle('active-link', a.getAttribute('data-section') === current);
                 });
             });
 
@@ -843,12 +803,13 @@
                     const filter = button.getAttribute('data-filter');
                     galleryItems.forEach(item => {
                         const category = item.getAttribute('data-category');
-                        if (filter === 'all' || filter === category) {
+                        const matches = filter === 'all' || filter === category;
+                        if (matches) {
                             item.style.display = 'block';
                             setTimeout(() => item.classList.remove('hide'), 10);
                         } else {
                             item.classList.add('hide');
-                            setTimeout(() => { item.style.display = 'none'; }, 400);
+                            setTimeout(() => item.style.display = 'none', 400);
                         }
                     });
                 });
@@ -858,9 +819,7 @@
             allVideos.forEach(video => {
                 video.addEventListener('play', (e) => {
                     allVideos.forEach(otherVideo => {
-                        if (otherVideo !== e.target) {
-                            otherVideo.pause();
-                        }
+                        if (otherVideo !== e.target) otherVideo.pause();
                     });
                 });
             });
@@ -874,61 +833,35 @@
             const wordCounter = document.getElementById('word-counter');
 
             const validators = {
-                name: {
-                    input: nameInput,
-                    errorDiv: document.getElementById('name-error'),
-                    validate: () => {
-                        const currentLang = htmlEl.getAttribute('lang');
-                        const nameRegex = currentLang === 'ar' ? /^[\p{L}\s'-]+$/u : /^[A-Za-z\s'-]+$/;
-                        if (!nameRegex.test(nameInput.value.trim())) return translations[currentLang].validationName;
-                        return '';
-                    }
-                },
-                email: {
-                    input: emailInput,
-                    errorDiv: document.getElementById('email-error'),
-                    validate: () => {
-                        const currentLang = htmlEl.getAttribute('lang');
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!emailRegex.test(emailInput.value.trim())) return translations[currentLang].validationEmail;
-                        return '';
-                    }
-                },
-                phone: {
-                    input: phoneInput,
-                    errorDiv: document.getElementById('phone-error'),
-                    validate: () => {
-                        const currentLang = htmlEl.getAttribute('lang');
-                        const phoneRegex = /^\d{7,}$/;
-                        if (!phoneRegex.test(phoneInput.value.trim())) return translations[currentLang].validationPhone;
-                        return '';
-                    }
-                },
-                subject: {
-                    input: subjectInput,
-                    errorDiv: document.getElementById('subject-error'),
-                    validate: () => {
-                        const currentLang = htmlEl.getAttribute('lang');
-                        const subjectRegex = /^[^0-9]*$/;
-                        if (!subjectRegex.test(subjectInput.value.trim())) return translations[currentLang].validationSubjectNoNumbers;
-                        if (subjectInput.value.trim().length < 3) return translations[currentLang].validationSubjectShort;
-                        return '';
-                    }
-                },
-                message: {
-                    input: messageInput,
-                    errorDiv: document.getElementById('message-error'),
-                    validate: () => {
-                        const currentLang = htmlEl.getAttribute('lang');
-                        const words = messageInput.value.trim().split(/\s+/).filter(w => w.length > 0);
-                        if (words.length < 12) return translations[currentLang].validationMessage;
-                        return '';
-                    }
-                }
+                name: { input: nameInput, errorDiv: document.getElementById('name-error'), validate: () => {
+                    const lang = htmlEl.getAttribute('lang');
+                    const regex = lang === 'ar' ? /^[\p{L}\s'-]+$/u : /^[A-Za-z\s'-]+$/;
+                    return !regex.test(nameInput.value.trim()) ? translations[lang].validationName : '';
+                }},
+                email: { input: emailInput, errorDiv: document.getElementById('email-error'), validate: () => {
+                    const lang = htmlEl.getAttribute('lang');
+                    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return !regex.test(emailInput.value.trim()) ? translations[lang].validationEmail : '';
+                }},
+                phone: { input: phoneInput, errorDiv: document.getElementById('phone-error'), validate: () => {
+                    const lang = htmlEl.getAttribute('lang');
+                    const regex = /^\d{7,}$/;
+                    return !regex.test(phoneInput.value.trim()) ? translations[lang].validationPhone : '';
+                }},
+                subject: { input: subjectInput, errorDiv: document.getElementById('subject-error'), validate: () => {
+                    const lang = htmlEl.getAttribute('lang');
+                    if (/[0-9]/.test(subjectInput.value)) return translations[lang].validationSubjectNoNumbers;
+                    if (subjectInput.value.trim().length < 3) return translations[lang].validationSubjectShort;
+                    return '';
+                }},
+                message: { input: messageInput, errorDiv: document.getElementById('message-error'), validate: () => {
+                    const lang = htmlEl.getAttribute('lang');
+                    const words = messageInput.value.trim().split(/\s+/).filter(w => w.length > 0);
+                    return words.length < 12 ? translations[lang].validationMessage : '';
+                }}
             };
 
             const checkField = (fieldName) => {
-                if (!validators[fieldName]) return true;
                 const validator = validators[fieldName];
                 const errorMessage = validator.validate();
                 validator.errorDiv.textContent = errorMessage;
@@ -942,29 +875,17 @@
             });
 
             messageInput.addEventListener('input', () => {
-                const currentLang = htmlEl.getAttribute('lang');
+                const lang = htmlEl.getAttribute('lang');
                 const words = messageInput.value.trim().split(/\s+/).filter(w => w.length > 0);
-                wordCounter.textContent = `${words.length} ${translations[currentLang].wordCounterText}`;
+                wordCounter.textContent = `${words.length} ${translations[lang].wordCounterText}`;
             });
 
             contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                let isFormValid = true;
-                Object.keys(validators).forEach(fieldName => {
-                    if (!checkField(fieldName)) {
-                        isFormValid = false;
-                    }
-                });
-
-                if (isFormValid) {
-                    console.log('Form is valid, submitting...');
-                    this.submit();
-                } else {
-                    console.log('Form is invalid.');
-                }
+                const isFormValid = Object.keys(validators).every(checkField);
+                if (isFormValid) this.submit();
             });
 
-            // --- Hamburger Menu Logic ---
             const hamburger = document.getElementById('hamburger-menu');
             const nav = document.getElementById('main-nav');
             const navOverlay = document.getElementById('nav-overlay');
@@ -977,19 +898,35 @@
 
             hamburger.addEventListener('click', toggleNav);
             navOverlay.addEventListener('click', toggleNav);
-            
-            navLinksMobile.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (nav.classList.contains('nav-open')) {
-                        toggleNav();
+            navLinksMobile.forEach(link => link.addEventListener('click', () => {
+                if (nav.classList.contains('nav-open')) toggleNav();
+            }));
+
+            // --- Device Specific Logic ---
+            const isMobileDevice = () => /Mobi|Android|iPhone/i.test(navigator.userAgent);
+            if (!isMobileDevice()) {
+                document.getElementById('phone-call-btn').classList.add('hide-on-desktop');
+            }
+
+            // --- Auto Scroll Logic ---
+            if (!sessionStorage.getItem('hasScrolled')) {
+                setTimeout(() => {
+                    const aboutSection = document.getElementById('about');
+                    if(aboutSection) {
+                        window.scrollTo({
+                            top: aboutSection.offsetTop - header.clientHeight,
+                            behavior: 'smooth'
+                        });
+                        sessionStorage.setItem('hasScrolled', 'true');
                     }
-                });
-            });
-
-
-            // Initialize language
-            const savedLang = localStorage.getItem('lang') || 'en';
-            setLanguage(savedLang);
+                }, 3000); // 3-second delay
+            }
+            
+            // --- Initialize Language from URL or Storage ---
+            const urlHash = window.location.hash.substring(1);
+            const savedLang = localStorage.getItem('lang');
+            const initialLang = (urlHash === 'ar' || urlHash === 'en') ? urlHash : (savedLang || 'en');
+            setLanguage(initialLang);
         });
     </script>
 
