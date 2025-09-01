@@ -463,7 +463,14 @@
             .container { padding: 0 1rem; }
             section { padding: 3rem 0; }
 
-            .logo { font-size: 1.2rem; }
+            .logo { display: none; } /* Hide logo on mobile to make space */
+             .main-header .container {
+                justify-content: flex-end; /* Align hamburger to the right */
+            }
+            html[dir="rtl"] .main-header .container {
+                justify-content: flex-start; /* Align hamburger to the left in RTL */
+            }
+
             .main-nav {
                 position: fixed;
                 top: 0;
@@ -755,14 +762,21 @@
                 
                 langSwitcher.textContent = lang === 'ar' ? 'English' : 'العربية';
                 localStorage.setItem('lang', lang);
-                
-                // Only set hash if it's different to avoid reloads
-                if(window.location.hash !== `#${lang}`) {
-                    history.pushState(null, null, `#${lang}`);
-                }
 
+                // FIX: Use hash for URL state to avoid security errors
+                if(window.location.hash !== `#${lang}`) {
+                    // We only update the language part, preserving any section hash
+                    const sectionHash = window.location.hash.split('/').pop();
+                    if (sectionHash && !['en', 'ar'].includes(sectionHash)) {
+                         window.location.hash = `${lang}/${sectionHash}`;
+                    } else {
+                         window.location.hash = lang;
+                    }
+                }
+                
                 Object.keys(validators).forEach(key => checkField(key));
             };
+            
 
             langSwitcher.addEventListener('click', () => {
                 const newLang = htmlEl.getAttribute('lang') === 'en' ? 'ar' : 'en';
@@ -791,20 +805,21 @@
             window.addEventListener('scroll', reveal);
             reveal();
 
-            // Active link highlighting on scroll - Re-enabled for better UX
             const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.main-nav a');
-            window.addEventListener('scroll', () => {
-                let current = 'home';
-                sections.forEach(section => {
-                    if (pageYOffset >= section.offsetTop - header.clientHeight - 5) { // Adjusted offset
-                        current = section.getAttribute('id');
+            const navLinks = document.querySelectorAll('.main-nav a[data-section]');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active-link', link.getAttribute('data-section') === entry.target.id);
+                        });
                     }
                 });
-                navLinks.forEach(a => {
-                    a.classList.toggle('active-link', a.getAttribute('data-section') === current);
-                });
-            });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+
+            sections.forEach(section => observer.observe(section));
+
 
             const filterButtons = document.querySelectorAll('.filter-btn');
             const galleryItems = document.querySelectorAll('.gallery-item');
@@ -929,9 +944,9 @@
             }
             
             // --- Initialize Language from URL or Storage ---
-            const urlHash = window.location.hash.substring(1);
+            const langFromUrl = window.location.hash.substring(1).split('/')[0];
             const savedLang = localStorage.getItem('lang');
-            const initialLang = (urlHash === 'ar' || urlHash === 'en') ? urlHash : (savedLang || 'en');
+            const initialLang = (langFromUrl === 'ar' || langFromUrl === 'en') ? langFromUrl : (savedLang || 'en');
             setLanguage(initialLang);
         });
     </script>
