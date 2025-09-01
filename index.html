@@ -378,8 +378,11 @@
         .quick-contact-btn.instagram {
             background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
         }
-        .quick-contact-btn.phone {
+        .quick-contact-btn.whatsapp {
              background: #25D366;
+        }
+         .quick-contact-btn.phone {
+             background: #34B7F1;
         }
 
         /* Footer */
@@ -485,10 +488,10 @@
                 <div class="gallery-item reveal" data-category="boy3"><img src="https://f.top4top.io/p_3499h5lep3.jpg" alt="صورة شاب"></div>
                 <div class="gallery-item reveal" data-category="boy3"><img src="https://e.top4top.io/p_3499yn7lw2.jpg" alt="صورة شاب"></div>
                 <div class="gallery-item reveal" data-category="boy3"><img src="https://d.top4top.io/p_3499km9e41.jpg" alt="صورة شاب"></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls poster="https://i.top4top.io/p_34998whbm2.jpg"><source src="https://a.top4top.io/m_3499b7byn1.mp4" type="video/mp4"></video></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls poster="https://h.top4top.io/p_3499ppjli1.jpg"><source src="https://b.top4top.io/m_3499sy4k52.mp4" type="video/mp4"></video></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls poster="https://k.top4top.io/p_349955q498.jpg"><source src="https://c.top4top.io/m_3499kx6ew3.mp4" type="video/mp4"></video></div>
-                <div class="gallery-item reveal" data-category="videos"><video controls poster="https://l.top4top.io/p_3499epsbn9.jpg"><source src="https://d.top4top.io/m_3499pxozc4.mp4" type="video/mp4"></video></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://a.top4top.io/m_3499b7byn1.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://b.top4top.io/m_3499sy4k52.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://c.top4top.io/m_3499kx6ew3.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
+                <div class="gallery-item reveal" data-category="videos"><video controls><source src="https://d.top4top.io/m_3499pxozc4.mp4" type="video/mp4">المتصفح لا يدعم عرض الفيديو.</video></div>
             </div>
         </div>
     </section>
@@ -496,7 +499,7 @@
     <section id="contact" class="reveal">
         <div class="container">
             <h2>تواصل معي</h2>
-            <form id="contact-form" class="contact-form" action="https://formspree.io/f/movwyklp" method="POST" novalidate>
+            <form id="contact-form" class="contact-form" action="https://formspree.io/f/mwpnvodj" method="POST" novalidate>
                 <div class="form-group">
                     <input type="text" id="name" name="name" required placeholder=" ">
                     <label for="name">الاسم الكامل</label>
@@ -530,6 +533,7 @@
 
     <div class="quick-contact">
         <a href="https://www.instagram.com/ghaith_photographer_?igsh=MWlrd2p0eGM4cTNhZw==" target="_blank" class="quick-contact-btn instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/962772599114" target="_blank" class="quick-contact-btn whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         <a href="tel:0772599114" class="quick-contact-btn phone" aria-label="Call"><i class="fas fa-phone"></i></a>
     </div>
 
@@ -607,6 +611,19 @@
                     });
                 });
             });
+
+            // --- Pause other videos when one plays ---
+            const allVideos = document.querySelectorAll('.gallery video');
+            allVideos.forEach(video => {
+                video.addEventListener('play', (e) => {
+                    allVideos.forEach(otherVideo => {
+                        if (otherVideo !== e.target) {
+                            otherVideo.pause();
+                        }
+                    });
+                });
+            });
+
 
             // --- Advanced Live Form Validation ---
             const contactForm = document.getElementById('contact-form');
@@ -705,3 +722,4 @@
 
 </body>
 </html>
+
