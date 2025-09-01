@@ -186,7 +186,7 @@
 
         /* Hero Section */
         #home {
-            height: 90vh; /* Reduced height */
+            height: 90vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -200,12 +200,12 @@
             font-size: clamp(2.5rem, 6vw, 4rem);
             margin-bottom: 1rem;
             color: white;
-            text-shadow: 0 3px 15px rgba(0,0,0,0.6); /* Enhanced text shadow */
+            text-shadow: 0 3px 15px rgba(0,0,0,0.6);
         }
 
         .hero-content p {
             font-size: clamp(1.2rem, 3vw, 1.5rem);
-            text-shadow: 0 2px 10px rgba(0,0,0,0.6); /* Enhanced text shadow */
+            text-shadow: 0 2px 10px rgba(0,0,0,0.6);
         }
 
         /* About Me Section */
@@ -443,10 +443,10 @@
              background: #34B7F1;
         }
         .hide-on-desktop {
-            display: flex !important; /* Default state */
+            display: flex !important;
         }
         body.desktop .hide-on-desktop {
-             display: none !important; /* Hide on desktop */
+             display: none !important;
         }
 
 
@@ -463,15 +463,23 @@
             .container { padding: 0 1rem; }
             section { padding: 3rem 0; }
 
-            .logo { display: none; } /* Hide logo on mobile to make space */
-             .main-header .container {
-                justify-content: flex-end; /* Align hamburger to the right */
+            .main-header .container {
+                justify-content: space-between;
+                position: relative;
             }
-            html[dir="rtl"] .main-header .container {
-                justify-content: flex-start; /* Align hamburger to the left in RTL */
+             .logo { 
+                font-size: 1.2rem; 
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
             }
-
+            html[dir="rtl"] .logo {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
             .main-nav {
+                display: none; /* Hide desktop nav */
                 position: fixed;
                 top: 0;
                 background: #fff;
@@ -481,12 +489,19 @@
                 transition: transform 0.5s ease-in-out;
                 box-shadow: 0 0 20px rgba(0,0,0,0.2);
             }
+            /* Add this to show the nav when it's open */
+            .main-nav.nav-open {
+                display: block;
+            }
+
             html[dir="ltr"] .main-nav { left: 0; transform: translateX(-100%); }
             html[dir="rtl"] .main-nav { right: 0; transform: translateX(100%); }
             
-            .main-nav.nav-open { transform: translateX(0); }
+            html[dir="ltr"] .main-nav.nav-open { transform: translateX(0); }
+            html[dir="rtl"] .main-nav.nav-open { transform: translateX(0); }
 
             .main-nav ul {
+                display: flex; /* Ensure flex is on for column layout */
                 flex-direction: column;
                 padding-top: 5rem;
                 align-items: center;
@@ -503,6 +518,9 @@
                 background: none;
                 border: none;
                 color: var(--primary-color);
+            }
+            html[dir="ltr"] .hamburger-menu {
+                order: 3; /* Push to the right */
             }
             
             #about .container { flex-direction: column; text-align: center; gap: 2rem; }
@@ -765,12 +783,13 @@
 
                 // FIX: Use hash for URL state to avoid security errors
                 if(window.location.hash !== `#${lang}`) {
-                    // We only update the language part, preserving any section hash
-                    const sectionHash = window.location.hash.split('/').pop();
-                    if (sectionHash && !['en', 'ar'].includes(sectionHash)) {
-                         window.location.hash = `${lang}/${sectionHash}`;
+                    const currentHash = window.location.hash;
+                    const sectionHash = currentHash.includes('/') ? currentHash.split('/')[1] : null;
+
+                    if (sectionHash) {
+                        window.location.hash = `${lang}/${sectionHash}`;
                     } else {
-                         window.location.hash = lang;
+                        window.location.hash = lang;
                     }
                 }
                 
@@ -825,6 +844,7 @@
             const galleryItems = document.querySelectorAll('.gallery-item');
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
+                    if(button.classList.contains('active')) return;
                     document.querySelector('.filter-btn.active').classList.remove('active');
                     button.classList.add('active');
                     const filter = button.getAttribute('data-filter');
